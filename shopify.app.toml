@@ -1,0 +1,29 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "02cf10abd9b8a752f9034411a7c6fee2"
+application_url = "https://companion-introducing-illness-ports.trycloudflare.com"
+embedded = true
+name = "boa-home-task-LI"
+handle = "boa-home-task-li"
+
+[build]
+include_config_on_deploy = true
+dev_store_url = "home-assignment-279.myshopify.com"
+automatically_update_urls_on_dev = true
+
+[webhooks]
+api_version = "2025-01"
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = ""
+
+[auth]
+redirect_urls = [
+  "https://companion-introducing-illness-ports.trycloudflare.com/auth/callback",
+  "https://companion-introducing-illness-ports.trycloudflare.com/auth/shopify/callback",
+  "https://companion-introducing-illness-ports.trycloudflare.com/api/auth/callback"
+]
+
+[pos]
+embedded = false
