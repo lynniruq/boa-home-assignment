@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "02cf10abd9b8a752f9034411a7c6fee2"
-application_url = "https://prayers-petite-schema-bags.trycloudflare.com"
+application_url = "https://lost-consumer-winning-inspections.trycloudflare.com"
 embedded = true
 name = "boa-home-task-LI"
 handle = "boa-home-task-li"
@@ -20,9 +20,9 @@ scopes = ""
 
 [auth]
 redirect_urls = [
-  "https://prayers-petite-schema-bags.trycloudflare.com/auth/callback",
-  "https://prayers-petite-schema-bags.trycloudflare.com/auth/shopify/callback",
-  "https://prayers-petite-schema-bags.trycloudflare.com/api/auth/callback"
+  "https://lost-consumer-winning-inspections.trycloudflare.com/auth/callback",
+  "https://lost-consumer-winning-inspections.trycloudflare.com/auth/shopify/callback",
+  "https://lost-consumer-winning-inspections.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]
