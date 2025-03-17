@@ -24,6 +24,7 @@ function Extension() {
   const cartLines = lines.current || [];
   const [selected, setSelected] = useState<string[]>([]);
   const {mutate,isPending, isError, data,status } = useSaveItems();
+  const [message,setMessage]=useState<string | null>(null)
   // const {buyerIdentity} = useApi();
   
   
@@ -32,7 +33,7 @@ function Extension() {
     console.log('sessionToken.get()', token);
     const userId = buyerIdentity?.email.current || 'guest';
     if (selected.length === 0) {
-      alert("Please select at least one item.");
+      setMessage('Please select at least one item.')
       return;
     }
   
