@@ -31,46 +31,38 @@ router.post(
     >,
     res: Response
   ): Promise<void> => {
-    console.log('✅ API route hit. Request body:', req.body);
-    console.log('✅ Query params:', req.query);
-
+  
     try {
       const { productIds, userId } = req.body;
       const shop = req.query.shop;
-
-      // ✅ Validate input and `shop`
       if (!productIds || !userId || !shop) {
-        console.error('❌ Missing productIds, userId, or shop');
         res.status(400).json({ error: 'Invalid request data (missing productIds, userId, or shop)' });
         return;
       }
 
       if (!shop.endsWith('.myshopify.com')) {
-        console.error('❌ Invalid shop domain:', shop);
+        console.error('Invalid shop domain:', shop);
         res.status(400).json({ error: 'Invalid shop domain' });
         return;
       }
 
       const idsArray = Array.isArray(productIds) ? productIds : [productIds];
 
-      // ✅ Save to database (WITHOUT saving shop)
       const savedCart = await prisma.itemsSaved.createMany({
         data: idsArray.map((productId) => ({
           productId,
           userId,
         })),
-        skipDuplicates: true, // ✅ Avoid duplicate entries
+        skipDuplicates: true,
       });
 
-      console.log('✅ Saved Cart:', savedCart);
 
       res.json({
         success: true,
-        message: `Cart saved successfully for shop: ${shop}`, // ✅ Mention shop in response only
+        message: `Cart saved successfully for shop: ${shop}`,
         savedCart,
       });
     } catch (error) {
-      console.error('❌ Error saving cart:', error);
       res.status(500).json({ error: 'Failed to save cart' });
     }
   }

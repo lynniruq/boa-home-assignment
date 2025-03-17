@@ -11,6 +11,7 @@ import {
 import { useCallback, useState } from "react";
 import useSaveItems from "./hooks/useSaveItems";
 import { QueryClient,QueryClientProvider } from "@tanstack/react-query";
+import { Status } from "@shopify/ui-extensions/src/surfaces/checkout";
 const queryClient = new QueryClient();
 
 export default reactExtension("purchase.checkout.block.render", () => (
@@ -23,33 +24,45 @@ function Extension() {
   const { lines,buyerIdentity,shop,extension,sessionToken } = useApi(); // Get checkout lines
   const cartLines = lines.current || [];
   const [selected, setSelected] = useState<string[]>([]);
-  const {mutate,isPending, isError, data,status } = useSaveItems();
+  const {mutateAsync,isPending, isError, data,status } = useSaveItems();
   const [message,setMessage]=useState<string | null>(null)
+  const [bannerStatus,setBannerStatus]=useState<Status | null>(null)
   // const {buyerIdentity} = useApi();
   
   
   const handleSubmit = useCallback(async () => {
+    console.log("shop",shop)
+    try{    
     const token = await sessionToken.get();
-    console.log('sessionToken.get()', token);
     const userId = buyerIdentity?.email.current || 'guest';
     if (selected.length === 0) {
       setMessage('Please select at least one item.')
+      setBannerStatus("info")
       return;
     }
   
-    mutate({
+    mutateAsync({
       productIds: selected.length === 1 ? selected[0] : selected, 
       userId: userId,
       baseURL: new URL(extension.scriptUrl).origin,
-      shop:shop.name,
+      shop:shop.myshopifyDomain,
       token:String(token),
 
     });
-    console.log({selected,userId,status})
+    if(data?.success){
+      setMessage('Cart Saved')
+      setBannerStatus('success')
+    }else{
+      throw new Error()
+    }
+  
+  }catch(error){
+    setMessage('Failed to save cart')
+    setBannerStatus('critical')
+  }
   },[selected]);
 
   const handleChange = (value: string | string[]) => {
-    console.log("email",buyerIdentity?.email.current)
     const selectedValues = Array.isArray(value) ? value : [value];
     setSelected(selectedValues);
   };
@@ -86,8 +99,8 @@ function Extension() {
         >
          {isPending? "Saving..": "Save"}
         </Button>
-            {isError &&<Banner status="critical">Failed to save cart</Banner>}
-            {data?.success &&<Banner status="success"> {data.message}</Banner>}
+            {message &&<Banner status={bannerStatus}>{message}</Banner>}
+            {/* {data?.success &&<Banner status="success"> {data.message}</Banner>} */}
     </BlockStack>
 
 

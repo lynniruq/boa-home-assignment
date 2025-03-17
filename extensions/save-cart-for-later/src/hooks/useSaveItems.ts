@@ -1,4 +1,3 @@
-import { useSessionToken } from '@shopify/ui-extensions-react/checkout';
 import { useMutation } from '@tanstack/react-query';
 
 type SaveCartInput = {
@@ -17,7 +16,7 @@ type SaveCartResponse = {
 const useSaveItems = () => {
   return useMutation<SaveCartResponse, Error, SaveCartInput>({
     mutationFn: async ({ productIds, userId, baseURL, shop,token }) => {
-      console.log({ baseURL, shop });
+      console.log({shop,baseURL})
       try {
         const idsArray = Array.isArray(productIds) ? productIds : [productIds];
         const response = await fetch(`${baseURL}/api/my-extension/save-cart?shop=${shop}`, {
@@ -25,6 +24,7 @@ const useSaveItems = () => {
           headers: {
             'Content-Type': 'application/json',
             'Shopify-Storefront-Access-Token': token,},
+          mode:'cors',
           body: JSON.stringify({
             productIds: idsArray,
             userId,

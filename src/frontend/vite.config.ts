@@ -17,9 +17,9 @@ if (
 
 const proxyOptions = {
 	target: `http://127.0.0.1:${process.env.BACKEND_PORT}`,
-	changeOrigin: false,
+	changeOrigin: true,
 	secure: true,
-	ws: false,
+	ws: true,
 };
 
 const host = process.env.HOST ? process.env.HOST.replace(/https?:\/\//, '') : 'localhost';
@@ -54,6 +54,7 @@ export default defineConfig({
 		proxy: {
 			'^/(\\?.*)?$': proxyOptions,
 			'^/api(/|(\\?.*)?$)': proxyOptions,
+			'^/api/my-extension(/|(\\?.*)?$)':proxyOptions,
 		},
 	},
 });

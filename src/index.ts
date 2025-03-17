@@ -13,6 +13,7 @@ const backendPort = process.env.BACKEND_PORT as string;
 const envPort = process.env.PORT as string;
 const PORT = parseInt(backendPort || envPort, 10);
 
+
 const app = express();
 
 const corsOptions = {
@@ -30,7 +31,6 @@ app.options('*', (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Shopify-Storefront-Access-Token');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Cache-Control', 'no-cache');
   res.status(204).end();
 });
 
@@ -38,22 +38,20 @@ app.use(express.json());
 
 const router = express.Router();
 
+
 router.post('/api/my-extension/save-cart', async (req, res) => {
-  console.log('✅ API route hit. Request body:', req.body);
-  console.log('✅ Query params:', req.query);
 
   try {
     const { productIds, userId } = req.body;
     const shop = req.query.shop;
 
     if (!productIds || !userId || !shop) {
-      console.error('❌ Missing productIds, userId, or shop');
       res.status(400).json({ error: 'Invalid request data' });
       return;
     }
 
     if (!shop.endsWith('.myshopify.com')) {
-      console.error('❌ Invalid shop domain:', shop);
+      console.error('Invalid shop domain:', shop);
       res.status(400).json({ error: 'Invalid shop domain' });
       return;
     }
@@ -65,15 +63,13 @@ router.post('/api/my-extension/save-cart', async (req, res) => {
       skipDuplicates: true,
     });
 
-    console.log('✅ Saved Cart:', savedCart);
-
     res.json({
       success: true,
       message: `Cart saved successfully for shop: ${shop}`,
       savedCart,
     });
   } catch (error) {
-    console.error('❌ Error saving cart:', error);
+    console.error('Error saving cart:', error);
     res.status(500).json({ error: 'Failed to save cart' });
   }
 });
@@ -104,5 +100,5 @@ app.use("/*", shopify.ensureInstalledOnShop(), async (_req, res) => {
 });
 
 app.listen(PORT, () =>
-  console.log(`✅ Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`)
 );
