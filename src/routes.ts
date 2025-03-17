@@ -21,7 +21,7 @@ const router = express.Router();
  * }
  */
 router.post(
-  '/api/save-cart',
+  '/api/my-extension/save-cart',
   async (
     req: Request<
       {}, 

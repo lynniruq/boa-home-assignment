@@ -20,21 +20,15 @@ const useSaveItems = () => {
       console.log({ baseURL, shop });
       try {
         const idsArray = Array.isArray(productIds) ? productIds : [productIds];
-        const response = await fetch(`${baseURL}/apps/my-extension/api/save-cart?shop=${shop}`, {
+        const response = await fetch(`${baseURL}/api/my-extension/save-cart?shop=${shop}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Shopify-Storefront-Access-Token': 
-            // `Bearer ${
-              token
-            // }`
-            ,
-          },
+            'Shopify-Storefront-Access-Token': token,},
           body: JSON.stringify({
             productIds: idsArray,
             userId,
           }),
-          credentials:'include',
         });
 
         if (!response.ok) {
